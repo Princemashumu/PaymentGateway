@@ -21,7 +21,6 @@ function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-       
         <Text style={styles.heading}>Products</Text>
         <View style={styles.productCard}>
           <Image
@@ -40,14 +39,13 @@ function HomeScreen({ navigation }) {
           </View>
 
           {/* Proceed to Checkout Button */}
-          
         </View>
         <TouchableOpacity
-            style={styles.checkoutButton}
-            onPress={() => navigation.navigate('PaystackPayment')}
-          >
-            <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
-          </TouchableOpacity>
+          style={styles.checkoutButton}
+          onPress={() => navigation.navigate('PaystackPayment')}
+        >
+          <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -79,23 +77,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-  },
-  summaryContainer: {
-    backgroundColor: '#f9f9f9',
-    padding: 20,
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  summaryText: {
-    fontSize: 16,
-    marginVertical: 5,
-    color: '#333',
-  },
-  totalText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 10,
-    color: '#000',
   },
   productCard: {
     backgroundColor: '#fff',
