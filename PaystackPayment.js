@@ -57,7 +57,6 @@ const PaystackPayment = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Order Summary</Text>
       <View style={styles.summaryContainer}>
         <Text style={styles.summaryText}>Order: R300.00</Text>
         <Text style={styles.summaryText}>Taxes: R30.00</Text>

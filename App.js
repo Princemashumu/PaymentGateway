@@ -78,7 +78,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Order' }} />
-        <Stack.Screen name="PaystackPayment" component={PaystackPayment} options={{ title: 'Checkout' }} />
+        <Stack.Screen name="PaystackPayment" component={PaystackPayment} options={{ title: 'Order Summary' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
