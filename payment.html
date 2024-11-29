@@ -5,6 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paystack Payment Integration</title>
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            /* background-color: #f4f4f4; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #paystack-button {
+            background-color: #ff0095;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: '25px';
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        #paystack-button:hover {
+            background-color: #00b7ff;
+            transform: scale(1.05);
+        }
+        #paystack-button:active {
+            background-color: #dcf309;
+            transform: scale(0.98);
+        }
+        #paystack-button:focus {
+            outline: none;
+        }
+        @media (max-width: 600px) {
+            #paystack-button {
+                padding: 12px 20px;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <button id="paystack-button" onclick="payWithPaystack()">Pay with Paystack</button>
@@ -15,13 +54,11 @@
             var handler = PaystackPop.setup({
                 key: 'pk_test_3bbc961d61b61ca3b68bd516ed9b7ff276ee0e78', // Replace with your Paystack public key
                 email: 'customer@example.com', // The email address of the user
-                amount: 5000, // Amount in kobo (e.g., 5000 kobo = 50.00 units of the currency)
+                amount: 35000, // Amount in kobo (e.g., 5000 kobo = 50.00 units of the currency)
                 currency: 'ZAR',
                 ref: 'txn_ref_' + Math.floor((Math.random() * 1000000) + 1), // Unique reference number for the transaction
                 callback: function(response) {
-                    // Handle payment success
                     alert('Payment was successful. Payment reference: ' + response.reference);
-                    // Optionally, send the reference to your server to verify and complete the payment.
                     verifyPayment(response.reference);
                 },
                 onClose: function() {
@@ -32,9 +69,8 @@
             handler.openIframe();
         }
 
-        // Function to verify the payment on the server side (you would typically call your backend here)
+        // Function to verify the payment on the server side
         function verifyPayment(reference) {
-            // Example: Make an AJAX request to your server to verify the payment
             fetch('https://your-server.com/verify-payment', {
                 method: 'POST',
                 headers: {
