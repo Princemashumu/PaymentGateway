@@ -1,12 +1,14 @@
+// PaymentPage.js
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Alert, Platform, Image, SafeAreaView, Modal } from 'react-native';
 import { WebView } from 'react-native-webview';
 import PaystackPayment from './PaystackPayment';
+import { StatusBar } from 'expo-status-bar';
 
-export default function App() {
+const PaymentPage = () => {
   const [paymentStatus, setPaymentStatus] = useState(null);
-  const [selectedWeight, setSelectedWeight] = useState('250g'); // Default selection
-  const [isModalVisible, setIsModalVisible] = useState(false); // For managing modal visibility
+  const [selectedWeight, setSelectedWeight] = useState('250g');
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const webViewRef = useRef(null);
 
   const handleWebViewMessage = (event) => {
@@ -25,11 +27,33 @@ export default function App() {
     }
   };
 
+  const initiatePayment = () => {
+    if (webViewRef.current) {
+      webViewRef.current.injectJavaScript(`
+        (function() {
+          if (typeof handlePayment === 'function') {
+            handlePayment();
+          } else {
+            window.ReactNativeWebView.postMessage('Payment function not available');
+          }
+        })();
+      `);
+    }
+  };
+
+  const openPaymentModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closePaymentModal = () => {
+    setIsModalVisible(false);
+  };
+
   const renderRadioButton = (value) => (
     <TouchableOpacity
       style={styles.radioButton}
       onPress={() => value === '250g' && setSelectedWeight(value)}
-      disabled={value !== '250g'} // Disable selection for other options
+      disabled={value !== '250g'}
     >
       <View
         style={selectedWeight === value ? styles.radioSelected : styles.radioUnselected}
@@ -41,7 +65,6 @@ export default function App() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Order Summary Section */}
         <Text style={styles.heading}>Order Summary</Text>
         <View style={styles.summaryContainer}>
           <Text style={styles.summaryText}>Order: R300.00</Text>
@@ -51,7 +74,6 @@ export default function App() {
           <Text style={styles.estimatedText}>Estimated Delivery Time: 60 mins</Text>
         </View>
 
-        {/* Product Section */}
         <Text style={styles.heading}>Product</Text>
         <View style={styles.productContainer}>
           <Image
@@ -63,13 +85,14 @@ export default function App() {
             Smooth and rich instant coffee for your perfect cup, any time.
           </Text>
 
-          {/* Radiobox Section */}
           <View style={styles.radioContainer}>
             {renderRadioButton('50g')}
             {renderRadioButton('150g')}
             {renderRadioButton('250g')}
           </View>
         </View>
+
+        <View style={{ flex: 1 }} />
 
         <View style={{ flex: 1 }}>
           {Platform.OS === 'web' ? (
@@ -88,10 +111,39 @@ export default function App() {
         </View>
 
         {paymentStatus && <Text style={styles.statusText}>{paymentStatus}</Text>}
+        <StatusBar style="auto" />
       </View>
+
+      <View style={styles.footerContainer}>
+        <TouchableOpacity
+          style={styles.checkoutButton}
+          onPress={openPaymentModal}
+        >
+          <Text style={styles.buttonText}>Checkout</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal
+        visible={isModalVisible}
+        animationType="slide"
+        onRequestClose={closePaymentModal}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.heading}>Proceed with Payment</Text>
+            <PaystackPayment />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={closePaymentModal}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -137,6 +189,7 @@ const styles = StyleSheet.create({
   productImage: {
     width: 150,
     height: 200,
+    borderRadius: 0,
     borderWidth: 1,
     borderColor: 'black',
   },
@@ -174,9 +227,53 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f4f4f4',
+  },
+  checkoutButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#ff6347',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
   statusText: {
     marginTop: 20,
     fontSize: 18,
     color: '#333',
   },
 });
+
+export default PaymentPage;
