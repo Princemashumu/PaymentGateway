@@ -22,6 +22,7 @@ function HomeScreen({ navigation }) {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <Text style={styles.heading}>Products</Text>
+        <View style={styles.productsContainer}>
         <View style={styles.productCard}>
           <Image
             source={require('./assets/7891000315606.webp')}
@@ -39,6 +40,25 @@ function HomeScreen({ navigation }) {
           </View>
 
           {/* Proceed to Checkout Button */}
+        </View>
+        <View style={styles.productCard}>
+          <Image
+            source={require('./assets/coffee M.jpg')}
+            style={styles.productImage}
+          />
+          <Text style={styles.productTitle}>Rich Roast</Text>
+          <Text style={styles.productDescription}>
+            Smooth and rich instant coffee for your perfect cup, any time.
+          </Text>
+
+          <View style={styles.radioContainer}>
+            {renderRadioButton('50g')}
+            {renderRadioButton('150g')}
+            {renderRadioButton('250g')}
+          </View>
+
+          {/* Proceed to Checkout Button */}
+        </View>
         </View>
         <TouchableOpacity
           style={styles.checkoutButton}
@@ -89,9 +109,13 @@ const styles = StyleSheet.create({
     elevation: 5,
     alignItems: 'center',
   },
+  productsContainer:{
+gap:30
+
+  },
   productImage: {
-    width: 150,
-    height: 200,
+    width: 140,
+    height: 160,
     borderRadius: 8,
     marginBottom: 10,
   },
