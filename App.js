@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import PaystackPayment from './PaystackPayment'; // Import the PaystackPayment component
+import PaystackPayment from './PaystackPayment';
 
 function HomeScreen({ navigation }) {
   const [selectedWeight, setSelectedWeight] = useState('250g');
@@ -20,53 +20,35 @@ function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.heading}>Products</Text>
-        <View style={styles.productsContainer}>
-        <View style={styles.productCard}>
-          <Image
-            source={require('./assets/7891000315606.webp')}
-            style={styles.productImage}
-          />
-          <Text style={styles.productTitle}>Nescafé Classic</Text>
-          <Text style={styles.productDescription}>
-            Smooth and rich instant coffee for your perfect cup, any time.
-          </Text>
-
-          <View style={styles.radioContainer}>
-            {renderRadioButton('50g')}
-            {renderRadioButton('150g')}
-            {renderRadioButton('250g')}
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.container}>
+          <Text style={styles.heading}>Products</Text>
+          <View style={styles.productsContainer}>
+            <View style={styles.productCard}>
+              <Image source={require('./assets/7891000315606.webp')} style={styles.productImage} />
+              <Text style={styles.productTitle}>Nescafé Classic</Text>
+              <Text style={styles.productDescription}>Smooth and rich instant coffee for your perfect cup, any time.</Text>
+              <View style={styles.radioContainer}>
+                {renderRadioButton('250g')}
+              </View>
+              <TouchableOpacity style={styles.checkoutButton} onPress={() => navigation.navigate('PaystackPayment')}>
+                <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.productCard}>
+              <Image source={require('./assets/coffee M.jpg')} style={styles.productImage} />
+              <Text style={styles.productTitle}>Rich Roast</Text>
+              <Text style={styles.productDescription}>Smooth and rich instant coffee for your perfect cup, any time.</Text>
+              <View style={styles.radioContainer}>
+                {renderRadioButton('250g')}
+              </View>
+              <TouchableOpacity style={styles.checkoutButton} onPress={() => navigation.navigate('PaystackPayment')}>
+                <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-
-          {/* Proceed to Checkout Button */}
         </View>
-        <View style={styles.productCard}>
-          <Image
-            source={require('./assets/coffee M.jpg')}
-            style={styles.productImage}
-          />
-          <Text style={styles.productTitle}>Rich Roast</Text>
-          <Text style={styles.productDescription}>
-            Smooth and rich instant coffee for your perfect cup, any time.
-          </Text>
-
-          <View style={styles.radioContainer}>
-            {renderRadioButton('50g')}
-            {renderRadioButton('150g')}
-            {renderRadioButton('250g')}
-          </View>
-
-          {/* Proceed to Checkout Button */}
-        </View>
-        </View>
-        <TouchableOpacity
-          style={styles.checkoutButton}
-          onPress={() => navigation.navigate('PaystackPayment')}
-        >
-          <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -89,6 +71,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  scrollViewContainer: {
+    paddingBottom: 20,
+  },
   container: {
     flex: 1,
     padding: 20,
@@ -108,10 +93,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     alignItems: 'center',
+    marginBottom: 20,
   },
-  productsContainer:{
-gap:30
-
+  productsContainer: {
+    gap: 30,
   },
   productImage: {
     width: 140,
