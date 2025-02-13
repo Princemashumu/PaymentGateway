@@ -201,10 +201,10 @@ const PaystackPayment = () => {
   
   const handleSubmit = () => {
     if (validateForm()) {
-      setShowPayment(true);
+      // setShowPayment(true);
       
       // Show a success alert after validation
-      Alert.alert("Success", "Your payment is being processed!");
+      Alert.alert("Success", "Payment processed!");
     } else {
       // Optionally, you can show an alert for form validation failure
       Alert.alert("Error", "Please fill out the form correctly.");
