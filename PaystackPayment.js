@@ -170,35 +170,44 @@ const PaystackPayment = () => {
     }
   };
 
-  const verifyPayment = (reference) => {
+  const verifyPayment = async (reference) => {
     setLoading(true);
-    fetch('https://your-server.com/verify-payment', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ reference }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === 'success') {
-          Alert.alert('Payment Verified', 'Payment successfully verified on the server.');
-        } else {
-          Alert.alert('Verification Failed', 'Payment verification failed.');
-        }
-      })
-      .catch((error) => {
-        console.error('Verification Error:', error);
-        Alert.alert('Error', 'There was an error verifying your payment.');
-      })
-      .finally(() => {
-        setLoading(false);
+    console.log("Verifying payment with reference:", reference);
+  
+    try {
+      const response = await fetch(`https://api.paystack.co/transaction/verify/${reference}`, {
+        method: "GET",
+        headers: {
+          Authorization: `sk_test_8dcc2ce210e27f464390096d8bdee4d8a5f62404`,  // Replace with your Paystack secret key
+          "Content-Type": "application/json",
+        },
       });
+  
+      const data = await response.json();
+      console.log("Verification Response:", data);
+  
+      if (data.status && data.data.status === "success") {
+        Alert.alert("Payment Verified", "Your payment was successful!");
+      } else {
+        Alert.alert("Verification Failed", "Payment verification failed.");
+      }
+    } catch (error) {
+      console.error("Verification Error:", error);
+      Alert.alert("Error", "There was an error verifying your payment.");
+    } finally {
+      setLoading(false);
+    }
   };
-
+  
   const handleSubmit = () => {
     if (validateForm()) {
       setShowPayment(true);
+      
+      // Show a success alert after validation
+      Alert.alert("Success", "Your payment is being processed!");
+    } else {
+      // Optionally, you can show an alert for form validation failure
+      Alert.alert("Error", "Please fill out the form correctly.");
     }
   };
 
@@ -258,7 +267,7 @@ const PaystackPayment = () => {
             <TouchableOpacity
               style={styles.payButton}
               onPress={handleSubmit}
-              disabled={loading}
+              // disabled={loading}
             >
               {loading ? (
                 <ActivityIndicator color="#fff" />
